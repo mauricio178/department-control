@@ -8,11 +8,6 @@ interface ControlsProviderProps {
 export type SectorProps = {
     id?: number,
     name: string
-    // charges: [
-    //     {
-    //         name: string,
-    //     }
-    // ]
 }
 
 export type ChargeProps = {
@@ -22,10 +17,10 @@ export type ChargeProps = {
 }
 
 interface ControlsContextData {
-    addSector: (data: SectorProps) => void
+    addSector: (data: SectorProps) => Promise<boolean>
     editSector: (data: SectorProps) => void
     deleteSector: (id: number) => void
-    addCharge: (sectorId: number, name: string) => void
+    addCharge: (name: string) => void
     editCharge: (data: ChargeProps) => void
     getSectors: () => void
     getCharges: (sector_id: number) => void
@@ -33,11 +28,15 @@ interface ControlsContextData {
     dataEdit: boolean,
     setDataEdit: Dispatch<SetStateAction<boolean>>,
     load: boolean,
+    modal: boolean,
     setLoad: Dispatch<SetStateAction<boolean>>,
+    setModal: Dispatch<SetStateAction<boolean>>,
     chargeList: ChargeProps[],
     setChargeList: Dispatch<SetStateAction<[]>>,
     sectorList: SectorProps[],
     setSectorList: Dispatch<SetStateAction<[]>>,
+    sectorSelected: number,
+    setSectorSelected: Dispatch<SetStateAction<number>>,
 
 }
 
@@ -47,10 +46,12 @@ function ControlsProvider({ children }: ControlsProviderProps) {
 
     //  ## STATES 
 
+    const [modal, setModal] = useState<boolean>(false)
     const [load, setLoad] = useState<boolean>(false)
     const [dataEdit, setDataEdit] = useState<boolean>(false)
     const [chargeList, setChargeList] = useState<ChargeProps[]>([])
     const [sectorList, setSectorList] = useState<SectorProps[]>([])
+    const [sectorSelected, setSectorSelected] = useState<number>(0)
 
     //  ## SECTOR 
 
@@ -75,8 +76,9 @@ function ControlsProvider({ children }: ControlsProviderProps) {
             const nameIsValid = sectorList.findIndex(val => val.name === data.name);
             if (nameIsValid >= 1) {
                 toast.error('Este Departamento já existe!')
+                return false
             } else {
-                await fetch("http://localhost:3000/sectors", {
+                return await fetch("http://localhost:3000/sectors", {
                     method: "POST",
                     headers: {
                         'Content-Type': 'application/json'
@@ -88,13 +90,19 @@ function ControlsProvider({ children }: ControlsProviderProps) {
                     .then(async (res) => {
                         toast.success(`Setor ${data.name} cadastrado!`)
                         getSectors()
+                        if (res.status === 201) {
+                            return true
+                        } else {
+                            return false
+                        }
                     })
                     .catch((err) => {
                         console.log(err)
+                        return false
                     })
             }
         } else {
-            await fetch("http://localhost:3000/sectors", {
+            return await fetch("http://localhost:3000/sectors", {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json'
@@ -106,9 +114,16 @@ function ControlsProvider({ children }: ControlsProviderProps) {
                 .then(async (res) => {
                     toast.success(`Primeiro Setor ${data.name} cadastrado!`)
                     getSectors()
+
+                    if (res.status === 201) {
+                        return true
+                    } else {
+                        return false
+                    }
                 })
                 .catch((err) => {
                     console.log(err)
+                    return false
                 })
         }
     }
@@ -142,7 +157,7 @@ function ControlsProvider({ children }: ControlsProviderProps) {
                 const newArray = []
 
                 await result.map((charge: ChargeProps) => {
-                    if(charge.sectorId !== sector_id){
+                    if (charge.sectorId !== sector_id) {
                         return
                     } else {
                         newArray.push(charge)
@@ -157,19 +172,23 @@ function ControlsProvider({ children }: ControlsProviderProps) {
             })
     }
 
-    async function addCharge(sectorId: number, name: string) {
-        await fetch(`http://localhost:3000/sectors/${sectorId}/charges`, {
+    async function addCharge(name: string) {
+
+        const newSectorId = sectorList.length + 1
+
+        await fetch(`http://localhost:3000/charges`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                name: name
+                name: name,
+                sectorId: sectorSelected !== 0 ? sectorSelected : newSectorId
             })
         })
             .then(async (res) => {
                 toast.success(`Cargo ${name} cadastrado!`)
-                getCharges(sectorId)
+                getCharges(sectorSelected !== 0 ? sectorSelected : newSectorId)
             })
             .catch((err) => {
                 console.log(err)
@@ -180,8 +199,21 @@ function ControlsProvider({ children }: ControlsProviderProps) {
 
     }
 
-    async function deleteCharge() {
-
+    async function deleteCharge(id: number) {
+        await fetch(`http://localhost:3000/charges/${id}`, {
+            method: "DELETE",
+        })
+            .then(async (res) => {
+                if (sectorSelected === 0) {
+                    getCharges(sectorList.length + 1)
+                } else {
+                    getCharges(sectorSelected)
+                }
+                toast.success(`Cargo deletado!`)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
     }
 
     return (
@@ -193,6 +225,8 @@ function ControlsProvider({ children }: ControlsProviderProps) {
                     getCharges,
                     sectorList,
                     setSectorList,
+                    setSectorSelected,
+                    sectorSelected,
                     getSectors,
                     chargeList,
                     setChargeList,
@@ -204,6 +238,8 @@ function ControlsProvider({ children }: ControlsProviderProps) {
                     addCharge,
                     editCharge,
                     deleteCharge,
+                    modal,
+                    setModal
                 }}
             >
                 {children}

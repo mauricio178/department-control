@@ -1,0 +1,46 @@
+.container{
+  width: 100%;
+  z-index: 99;
+  // background-image:
+  // linear-gradient(
+  //   rgba(0, 0, 0, 0.5),
+  //   rgba(0, 0, 0, 0.5));
+
+    .content{
+      margin-top: 2rem;
+      >h1{
+        font-size: 1.2rem;
+        >span{
+          color: var(--secondary-dark);
+        }
+      }
+
+    }
+
+    .nav{
+
+      max-height: 100%;
+      overflow-y: auto;
+      display: flex;
+
+
+      .normal {
+        &:hover{
+          cursor: pointer;
+          color: var(--primary);
+          font-weight: 600;
+        }
+      }
+
+      .selected{
+        font-weight: 600;
+        color: var(--primary);
+
+        &:hover{
+          cursor: pointer;
+          
+        }
+      }
+
+    }
+}

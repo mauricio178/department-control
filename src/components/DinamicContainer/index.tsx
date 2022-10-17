@@ -6,6 +6,8 @@ import { Charge } from '../Charge'
 import { Input } from '../Input'
 import styles from './styles.module.scss'
 import { AiFillCloseCircle } from 'react-icons/ai'
+import { Modal } from '../Modal'
+import { toast } from 'react-toastify'
 
 type DinamicContainerProps = {
 
@@ -21,20 +23,32 @@ export function DinamicContainer({ }: DinamicContainerProps) {
         dataEdit,
         chargeList,
         addSector,
-        deleteSector,
+        deleteCharge,
+        modal,
+        setModal,
+        sectorSelected,
+        setSectorSelected,
+        addCharge
     } = useControls()
 
     useEffect(() => {
-        if (dataEdit) {
-
-        }
+        console.log(sectorSelected)
     }, [])
 
     function actionCharge() {
         if (dataEdit) {
 
         } else {
-
+            if (sectorName === '') {
+                setModal(true)
+                if (sectorSelected !== 0 && chargeName !== '') {
+                    addCharge(chargeName)
+                    setChargeName('')
+                    setSectorSelected(0)
+                }
+            } else {
+                setModal(false)
+            }
         }
     }
 
@@ -42,15 +56,37 @@ export function DinamicContainer({ }: DinamicContainerProps) {
         if (dataEdit) {
             alert('edit')
         } else {
-            const obj = {
-                name: sectorName,
+
+            if (chargeName !== '' && sectorName !== '') {
+                const obj = {
+                    name: sectorName,
+                }
+                addSector(obj).then(res => {
+                    if (res === true) {
+                        addCharge(chargeName)
+                    } else {
+                        toast.error('Ocorreu um erro ao cadastrar')
+                    }
+                })
+                setChargeName('')
+                setSectorSelected(0)
             }
 
-            addSector(obj)
+            if (chargeName === '' && sectorName !== '') {
+                const obj = {
+                    name: sectorName,
+                }
+                addSector(obj)
+            }
             setSectorName('')
         }
     }
 
+    useEffect(() => {
+        if (chargeName !== '') {
+            setModal(true)
+        }
+    })
 
     return (
         <div className={styles.container}>
@@ -80,7 +116,7 @@ export function DinamicContainer({ }: DinamicContainerProps) {
                     <Button
                         type='submit'
                         theme='primary'
-                        disabled={!chargeName ? true : false}
+                        disabled={(sectorSelected === 0) ? true : false}
                         placeholder={dataEdit ? "Salvar" : "Cadastrar"}
                         onClick={() => { actionCharge() }}
                     />
@@ -88,25 +124,30 @@ export function DinamicContainer({ }: DinamicContainerProps) {
             </div>
 
             <div className={styles.listCharges}>
-                <p>Listando: <span>{chargeList.length}</span> cargo(s).</p>
-                {
-                    (chargeList !== undefined && chargeList.length > 0) ?
-                        <ul>
-                            {chargeList.map((charge: any, k: number) => {
-                                return (
-                                    <li key={k}>
-                                        {charge.name}
+                {modal ? <Modal name={chargeName} /> :
+                    <>
+                        <p>Listando: <span>{chargeList.length}</span> cargo(s).</p>
+                        {
+                            (chargeList !== undefined && chargeList.length > 0) ?
+                                <ul>
+                                    {chargeList.map((charge: any, k: number) => {
+                                        return (
+                                            <li key={k}>
+                                                {charge.name}
 
-                                        <AiFillCloseCircle />
-                                    </li>
-                                )
-                            })}
-                        </ul>
-                        :
-                        <li>Lista Vazia</li>
+                                                <AiFillCloseCircle onClick={() => deleteCharge(charge.id)} />
+                                            </li>
+                                        )
+                                    })}
+                                </ul>
+                                :
+                                <li>Lista Vazia</li>
 
 
+                        }
+                    </>
                 }
+
             </div>
 
             <div className={styles.bottom}>
@@ -118,7 +159,6 @@ export function DinamicContainer({ }: DinamicContainerProps) {
                     onClick={() => { actionSector() }}
                 />
             </div>
-
         </div>
     )
 }

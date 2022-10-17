@@ -1,8 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useEffect, useState } from 'react'
 import styles from './styles.module.scss'
-import {AiFillEdit} from 'react-icons/ai'
-import {BsFillTrashFill} from 'react-icons/bs'
+import { AiFillEdit } from 'react-icons/ai'
+import { BsFillTrashFill } from 'react-icons/bs'
+import { useControls } from '../../hooks/controls'
+import { toast } from 'react-toastify'
 
 type SectorProps = {
     name: string
@@ -16,6 +18,8 @@ type ChargeProps = {
 
 export function Charge({ name, id }: SectorProps) {
 
+    const { deleteCharge } = useControls()
+
     return (
         <div className={styles.container}>
             <p>{name}</p>
@@ -23,7 +27,11 @@ export function Charge({ name, id }: SectorProps) {
             <div className={styles.controls}>
                 <AiFillEdit />
 
-                <BsFillTrashFill />
+                <BsFillTrashFill onClick={() => {
+                    deleteCharge(id)
+                    toast.success(`Cargo ${name} Deletado!`)
+                }
+                } />
             </div>
         </div>
     )

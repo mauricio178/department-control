@@ -16,7 +16,13 @@ export function Sector({ name, id }: SectorProps) {
 
     const [open, setOpen] = useState<boolean>(false)
 
-    const { deleteSector, editSector, getCharges, chargeList } = useControls()
+    const { 
+        deleteSector, 
+        editSector, 
+        getCharges, 
+        chargeList,
+        setModal,
+    } = useControls()
 
     useEffect(() => {
         chargeList.map((charge: ChargeProps) => {
@@ -36,10 +42,12 @@ export function Sector({ name, id }: SectorProps) {
                         <BiHide onClick={(() => {
                             getCharges(id)
                             setOpen(!open)
+                            setModal(false)
                         })} /> :
                         <BiShowAlt onClick={(() => {
                             getCharges(id)
                             setOpen(!open)
+                            setModal(false)
                         })} />}
 
                     <AiFillEdit onClick={(() => {

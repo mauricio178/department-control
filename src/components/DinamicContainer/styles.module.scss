@@ -51,6 +51,42 @@
             color: var(--primary);
         }
     }
+
+    ul{
+        max-height: 100%;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: row;
+        padding: 0 0;
+
+        >li{
+            width: auto;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: .5rem 0;
+            background-color: var(--gray50);
+            margin-right: .5rem;
+            border-radius: .4rem;
+            padding: .5rem;
+            
+            >svg{
+                margin-left: .2rem;
+                
+            }
+
+            &:hover{
+                color: var(--secondary-light);
+                >svg{
+                    cursor: pointer;
+                    color: var(--red);
+                }
+                
+            }
+
+        }
+    }
   }
 
   .bottom{
