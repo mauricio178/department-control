@@ -1,0 +1,46 @@
+.container {
+  width: 100%;
+  height: 20%;
+  display: flex;
+  justify-content: space-between;
+  padding: 2rem;
+  border-bottom: 2px solid var(--white);
+  align-items: center;
+
+  .nav{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .logoff {
+    background-color: transparent;
+    padding: 10px;
+    height: 60px;
+    width: 60px;
+    border-radius: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    filter: brightness(0.8);
+
+    > svg {
+      font-size: 2rem;
+      color: var(--red);
+    }
+
+    &:hover {
+      background-color: var(--red);
+      transition: 0.5s;
+      cursor: pointer;
+      filter: brightness(1);
+
+      > svg {
+        transition: 0.5s;
+        color: var(--black);
+      }
+    }
+  }
+}

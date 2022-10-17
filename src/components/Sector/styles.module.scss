@@ -1,0 +1,78 @@
+.container {
+  padding: 0 0.5rem;
+  border-radius: 0.4rem;
+
+  .line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    p {
+      color: var(--white);
+      font-weight: 600;
+    }
+
+    .controls {
+      opacity: 0;
+      width: 20%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-left: 1rem;
+
+      > svg {
+        font-size: 1rem;
+        filter: brightness(0.8);
+
+        &:hover {
+          transition: 0.4s;
+          cursor: pointer;
+          color: var(--primary);
+          filter: brightness(1);
+        }
+      }
+    }
+
+    &:hover {
+      .controls {
+        opacity: 1;
+      }
+    }
+  }
+
+  .hideCharges {
+    transition: all 0.3s;
+    height: 0px;
+    overflow: hidden;
+
+    > div {
+      transition: all 0.3s;
+      opacity: 0;
+    }
+  }
+
+  .showCharges {
+    border-left: 2px solid var(--primary);
+    transition: all 0.3s;
+    z-index: 8;
+    max-height: 100%;
+
+    > div {
+      transition: all 0.3s;
+      opacity: 1;
+    }
+    border-bottom: 1px solid var(--primary);
+  }
+
+  &:hover {
+    transition: all 0.4s;
+    background-color: var(--gray50);
+
+    .hideCharges {
+    }
+
+    p {
+      color: var(--primary);
+    }
+  }
+}

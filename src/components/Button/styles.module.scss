@@ -1,0 +1,21 @@
+.primary{
+  border-radius: .5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: .5rem;
+  width: 100%;
+  font-weight: 700;
+  font-size: 1.2rem;
+  transition: all 0.5s;
+  background: var(--green-light);
+
+  &:hover{
+    cursor: pointer;
+  }
+}
+
+.green{
+  background-color: (--gren-light);
+}
+

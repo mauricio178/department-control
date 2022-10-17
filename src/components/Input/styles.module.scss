@@ -1,0 +1,47 @@
+.container,
+.containerDark {
+  input {
+    padding: 0.5rem;
+    border-radius: .4rem;
+    border-bottom: 2px solid var(--gray);
+    border-top: 0px solid transparent;
+    border-right: 0px solid transparent;
+    border-left: 0px solid transparent;
+    font-size: 1.2rem;
+    width: 100%;
+    color: var(--black);
+    outline: 0;
+  }
+
+  input::placeholder {
+    color: var(--white);
+  }
+
+  input:focus {
+    border-bottom: 2px solid var(--primary);
+  }
+}
+
+.container {
+  input {
+    background: transparent;
+    border-bottom: 2px solid var(--gray);
+    color: var(--primary);
+  }
+
+  input::placeholder {
+    color: var(--secondary-light);
+  }
+}
+
+.containerDark {
+  input {
+    background: var(--gray50);
+    border-bottom: 2px solid var(--black);
+    color: var(--primary);
+  }
+
+  input::placeholder {
+    color: var(--secondary-light);
+  }
+}

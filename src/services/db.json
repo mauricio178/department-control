@@ -1,0 +1,35 @@
+{
+  "sectors": [
+    {
+      "name": "Setor 1",
+      "id": 1
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "name": "User Test"
+    },
+    {
+      "name": "Leandro",
+      "id": 2
+    },
+    {
+      "name": "we",
+      "id": 3
+    },
+    {
+      "name": "oi",
+      "id": 4
+    },
+    {
+      "name": "Mauricio",
+      "id": 5
+    },
+    {
+      "name": "João das Neves",
+      "id": 6
+    }
+  ],
+  "charges": []
+}

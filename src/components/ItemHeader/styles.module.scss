@@ -1,0 +1,37 @@
+.container{
+    background-color: var(--gray);
+    width: 120px;
+    height: 120px;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-around;
+    filter: brightness(.7);
+    border-radius: .4rem;
+    margin-right: 2rem;
+
+    > svg{
+        font-size: 1.5rem;
+
+        >path{
+            fill: var(--white);
+        }
+    }
+
+    p {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: var(--white)
+    }
+
+    &:hover{
+        transition: .3s;
+        cursor: pointer;
+        filter: brightness(1);
+
+        >p{
+            color: var(--primary);
+        }
+    }
+} 
